@@ -1,18 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using CompanyManagementApplikation.Backend;
 using CompanyManagementApplikation.Classes;
 
@@ -31,9 +18,22 @@ namespace CompanyManagementApplikation
         public async void TryLogIn(object sender, RoutedEventArgs e)
         {
             Database database = new Database();
-            if (await database.CheckLogIn(Username.Text, Password.Password))
+            var res = await database.CheckLogIn(Username.Text, Password.Password);
+            if (res.HasValue)
             {
-                MessageBox.Show("Erfolg!");
+                User user = await database.GetEmployee(res.Value);
+                if(user.Team == "Management")
+                {
+                    ChooseAsManagement chooseAsManagement = new();
+                    chooseAsManagement.Show();
+                    this.Close();
+                }
+                else if(user.Team == "HR")
+                {
+                    HumanRessources humanRessources = new();
+                    humanRessources.Show();
+                    this.Close();
+                }
                 return;
             }
             MessageBox.Show("Username or password is wrong.");

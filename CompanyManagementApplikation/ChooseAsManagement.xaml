@@ -1,0 +1,22 @@
+﻿<Window x:Class="CompanyManagementApplikation.ChooseAsManagement"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CompanyManagementApplikation"
+        mc:Ignorable="d"
+        Title="Company " Height="200" Width="400" ResizeMode="CanMinimize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0" Grid.Column="0" Width="100" Height="50" Content="Development"/>
+        <Button Grid.Row="0" Grid.Column="1" Width="100" Height="50" Content="Accounting"/>
+        <Button Grid.Row="1" Grid.Column="0" Width="100" Height="50" Content="HR" Click="SendToHR"/>
+    </Grid>
+</Window>

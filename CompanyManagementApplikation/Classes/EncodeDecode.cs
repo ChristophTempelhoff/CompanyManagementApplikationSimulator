@@ -7,21 +7,21 @@ using System.Windows.Navigation;
 
 namespace CompanyManagementApplikation.Classes
 {
-    class Encode
+    public class Encode
     {
         public static string EncodeStringToBase64(string input)
         {
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(input));
         }
     }
-    class Decode
+    public class Decode
     {
         public static string DecodeStringToBase64(string input)
         {
             return Encoding.UTF8.GetString(Convert.FromBase64String(input));
         }
     }
-    class Hash
+    public class Hash
     {
         /// <summary>
         /// Gibt einen MD5 Hash als String zurück

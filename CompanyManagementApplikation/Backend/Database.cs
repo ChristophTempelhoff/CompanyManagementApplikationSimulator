@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using CompanyManagementApplikation.Classes;
@@ -41,7 +39,7 @@ namespace CompanyManagementApplikation.Backend
             }
         }
 
-        public Task<List<User>> GetUsers()
+        public Task<List<User>> GetEmployees()
         {
             try
             {
@@ -80,19 +78,51 @@ namespace CompanyManagementApplikation.Backend
             }
         }
 
-        public async Task<bool> CheckLogIn(string usernameClear, string passwordClear)
+        public Task<User?> GetEmployee(int id)
         {
-            List<User> users = await GetUsers();
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionData))
+                {
+                    return Task.Factory.StartNew(() =>
+                    {
+                        string query = "SELECT * FROM employees WHERE ID = @id";
+                        MySqlCommand command = new MySqlCommand(query);
+                        command.Connection = connection;
+                        command.Parameters.Add(new MySqlParameter("@id", id));
+                        connection.Open();
+                        MySqlDataReader dataReader = command.ExecuteReader();
+                        User user;
+                        while (dataReader.Read())
+                        {
+                            user = new(dataReader.GetString(1), dataReader.GetString(2), dataReader.GetDecimal(3), dataReader.GetString(4), DateTime.Parse(dataReader.GetString(5)), dataReader.GetString(6), dataReader.GetString(7), dataReader.GetString(8));
+                            user.Id = dataReader.GetInt32(0);
+                            return user;
+                        }
+                        return null;
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                throw;
+            }
+        }
+
+        public async Task<int?> CheckLogIn(string usernameClear, string passwordClear)
+        {
+            List<User> users = await GetEmployees();
 
             foreach (User user in users)
             {
                 if (user.Username == usernameClear && user.Password == Hash.CreateMD5(passwordClear))
                 {
-                    return true;
+                    return user.Id;
                 }
             }
 
-            return false;
+            return null;
         }
     }
 }
